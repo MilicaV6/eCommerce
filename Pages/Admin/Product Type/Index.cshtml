@@ -1,0 +1,38 @@
+﻿@page
+@model eCommerce.Pages.Admin.Product_Type.IndexModel
+
+@{
+    ViewData["Title"] = "Product Types";
+}
+
+<br />
+<br />
+<div class="container border backgroundWhite">
+    <div class="row">
+        <div class="col-6">
+            <h2 class="text-primary">Product Type List</h2>
+        </div>
+        <div class="col-6" style="text-align:right">
+            <a class="btn btn-primary " asp-page="Upsert"><i class="fas fa-plus"></i> &nbsp; Create New</a>
+        </div>
+    </div>
+    <br /><br />
+    <table class="table table-bordered table-striped " id="myTable">
+        <thead class="bg-primary text-white">
+            <tr>
+                <th class="col-7">
+                    @Html.DisplayNameFor(model => model.ProductType[0].Name)
+                </th>
+                <th>Id</th>
+                <th></th>
+            </tr>
+        </thead>
+        
+    </table>
+</div>
+
+
+    @section Scripts{
+       <script src="~/js/ProductTypeJavaScript.js"></script>
+        
+    }

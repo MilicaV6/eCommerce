@@ -1,0 +1,59 @@
+﻿@page
+@model eCommerce.Pages.Admin.Product_Type.UpsertModel
+
+@{
+    ViewData["Title"] = "Upsert";
+}
+
+<
+<br />
+<br />
+<form method="post" asp-action="Upsert" >
+    <div class="container row p-2 m-2 backgroundWhite border">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @if (Model.ProductType.ProductTypeID != 0)
+        {
+            <input type="hidden" asp-for="ProductType.ProductTypeID" />
+        }
+        <div class="col-12 px-3" style="border-bottom:2px solid #325d88">
+            <h2 class="text-primary">@(Model.ProductType.ProductTypeID==0? "Create ": "Edit") Product Type</h2>
+        </div>
+
+        <div class="col-5 pt-3">
+            <div class="form-group row p-3">
+
+                <label asp-for="ProductType.Name" class="form-label"></label>
+
+                <input type="text" class="form-control " asp-for="ProductType.Name" 
+                       placeholder="@(Model.ProductType.ProductTypeID==0? "Name" : Model.ProductType.Name)">
+                <span class="text-danger" asp-validation-for="ProductType.Name"></span>
+
+            </div>
+
+           
+            <div class="form-group row p-3">
+                <div class="col-6">
+
+
+                    <button type="submit" class="btn btn-primary form-control">
+                    @(Model.ProductType.ProductTypeID==0? "Create ": "Update")
+                    </button>
+
+                </div>
+                <div class="col-6">
+                    <a asp-page="./Index" class="btn btn-danger form-control">Back To List</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+@section Scripts{ 
+<script>
+
+</script>
+
+}
+
+

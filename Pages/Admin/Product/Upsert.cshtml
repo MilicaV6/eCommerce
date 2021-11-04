@@ -1,0 +1,168 @@
+﻿@page
+@model eCommerce.Pages.Admin.Product.UpsertModel
+@using eCommerce.Utility
+@{
+    ViewData["Title"] = "Upsert";
+}
+
+
+<br />
+
+<form method="post" asp-action="Upsert" class="row g-2" enctype="multipart/form-data">
+    <div class="container row p-2 m-2 backgroundWhite border">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @if (Model.ProductObj.Product.ProductID != 0)
+        {
+            <input type="hidden" asp-for="ProductObj.Product.ProductID" />
+        }
+        <div class="col-12 px-3" style="border-bottom:2px solid #325d88">
+            <h2 class="text-primary">@(Model.ProductObj.Product.ProductID == 0? "Create ": "Edit") Product</h2>
+        </div>
+
+        <div class="col col-6 pt-2 ">
+            <div class="form-group row p-3">
+
+                <label asp-for="ProductObj.Product.Name" class="form-label"></label>
+
+                <input type="text" class="form-control " asp-for="ProductObj.Product.Name"
+                       placeholder="@(Model.ProductObj.Product.ProductID==0? "Name" : Model.ProductObj.Product.Name)">
+                <span class="text-danger" asp-validation-for="ProductObj.Product.Name"></span>
+
+            </div>
+            <div class="form-group row p-3">
+
+                <label asp-for="ProductObj.Product.Cost" class="form-label"></label>
+
+                <input type="text" class="form-control " asp-for="ProductObj.Product.Cost" />
+                <span class="text-danger" asp-validation-for="ProductObj.Product.Cost"></span>
+
+            </div>
+            <div class="form-group row p-3">
+
+                <label asp-for="ProductObj.Product.CategoryID" class="form-label"></label>
+
+                <select class="form-control" asp-for="ProductObj.Product.CategoryID">
+                    <option value="0">--Select--</option>
+                    @foreach (int key in Model.ProductObj.CategoryList.Keys)
+                    {
+                        <option value="@key">@Model.ProductObj.CategoryList.GetValueOrDefault(key)</option>
+                    }
+                </select>
+                <span class="text-danger" asp-validation-for="ProductObj.Product.CategoryID"></span>
+            </div>
+            <div class="form-group row p-3">
+
+                <label asp-for="ProductObj.Product.ProductTypeID" class="form-label"></label>
+
+                <select class="form-control" asp-for="ProductObj.Product.ProductTypeID">
+                    <option value="0">--Select--</option>
+                    @foreach (int key in Model.ProductObj.ProductTypeList.Keys)
+                    {
+                        <option value="@key">@Model.ProductObj.ProductTypeList.GetValueOrDefault(key)</option>
+                    }
+                </select>
+                <span class="text-danger" asp-validation-for="ProductObj.Product.CategoryID"></span>
+            </div>
+
+            @if (User.IsInRole(SD.ManagerRole))
+            {
+                <div class="form-group row p-3">
+
+                    <label asp-for="ProductObj.Product.ApplicationUserID" class="form-label"></label>
+                    <select class="form-control" asp-for="ProductObj.Product.ApplicationUserID">
+                        <option value="0">--Select--</option>
+                        @foreach (string key in Model.ProductObj.SellerList.Keys)
+                        {
+                            <option value="@key">@Model.ProductObj.SellerList.GetValueOrDefault(key)</option>
+                        }
+
+                    </select>
+                    <span class="text-danger" asp-validation-for="ProductObj.Product.ApplicationUserID"></span>
+                </div>
+            }
+            else if (User.IsInRole(SD.SellerRole))
+            {
+                <div class="form-group row p-3">
+
+                    <label asp-for="User.Identity.Name" class="form-label"></label>
+                   
+                   <input type="text" disabled asp-for="User.Identity.Name" />
+                </div>
+            }
+
+          
+            <div class=" form-check ">
+                <input asp-for="ProductObj.Product.Discounted" type="checkbox" class="form-check-input" value="true" id="discountCheckChecked" />
+                <!---   <input type="checkbox" class="form-check-input" value="" id="discountCheckChecked" />-->
+                <label asp-for="ProductObj.Product.Discounted" class="form-check-label" for="discountCheckChecked"></label>
+
+            </div>
+
+            <div class="form-group row p-3">
+
+                <label asp-for="ProductObj.Product.Stock" class="form-label"></label>
+
+                <input type="number" class="form-control " asp-for="ProductObj.Product.Stock">
+
+
+            </div>
+
+        </div>
+        <div class="col  col-6 pt-2">
+            <div class="form-group row p-3">
+
+                <label asp-for="ProductObj.Product.Description" class="form-label"></label>
+
+                <textarea type="text" class="form-control " asp-for="ProductObj.Product.Description"
+                          id="txtDescription" style="height:30%"></textarea>
+
+
+            </div>
+
+            <div class="form-group row p-3">
+
+                <label asp-for="ProductObj.Product.Image" class="form-label"></label>
+
+                <input type="file" class="form-control " name="files" id="fileUpload" />
+
+
+            </div>
+            @if (Model.ProductObj.Product != null)
+            {
+            <div class=" form-group row p-3 text-center">
+                <img src="@Model.ProductObj.Product.Image" class="mx-auto d-block" style="border-radius:5px;border:1px solid #00ff90;width: 30%; height:10%"  />
+            </div>
+            }
+           
+
+
+            <div class="form-group row p-3">
+                <div class="col-6">
+
+
+                    <button type="submit" class="btn btn-primary form-control">
+                        @(Model.ProductObj.Product.ProductID == 0? "Create ": "Update")
+                    </button>
+
+                </div>
+                <div class="col-6">
+                    <a asp-page="./Index" class="btn btn-danger form-control">Back To List</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+@section Scripts{ 
+<script>
+    tinymce.init({
+        selector: 'textarea',
+        plugins: 'lists formatpainter permanentpen ',
+        menubar: 'file edit format'
+    });
+</script>
+
+}
+
+

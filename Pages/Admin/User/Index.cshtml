@@ -1,0 +1,31 @@
+﻿@page
+@model eCommerce.Pages.Admin.User.IndexModel
+@{
+}
+<br />
+<br />
+<div class="container  bg-body ">
+    <div class="row">
+        <div class="col-6">
+            <h2 class="text-primary">User List</h2>
+        </div>
+        <div class="col-6" style="text-align:right">
+            <a class="btn btn-primary " asp-page="/Account/Register" asp-area="Identity"><i class="fas fa-plus"></i> &nbsp; Create New</a>
+        </div>
+    </div>
+    <br /><br />
+    <table id="myTable" class="table hover row-border table-responsive table-bordered table-striped text-black-50" style="width:100%">
+        <thead class="bg-primary text-white">
+            <tr>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@section Scripts{
+    <script src="~/js/UserJavaScript.js"></script>
+}

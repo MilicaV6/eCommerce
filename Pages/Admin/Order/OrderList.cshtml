@@ -1,0 +1,59 @@
+﻿@page
+@model eCommerce.Pages.Admin.Order.OrderListModel
+@{
+
+
+    var status = HttpContext.Request.Query["status"];
+    var cancelled = "btn-outline-primary";
+    var completed = "btn-outline-primary";
+    var inprocess = "btn-outline-primary";
+
+    if (status == "cancelled")
+    {
+        cancelled = "active bg-primary text-white";
+    }
+    else if (status == "completed")
+    {
+        completed = "active bg-primary text-white";
+    }
+    else if (status == "inprocess")
+    {
+        inprocess = "active bg-primary text-white";
+    }
+
+
+}
+<br />
+<br />
+<div class="container  bg-body ">
+    <div class=" d-flex justify-content-between mb-3">
+        <div class="p-2">
+            <h2 class="text-primary">Orders List</h2>
+        </div>
+        
+        <div class="btn-group p-2" aria-label="Status">
+           
+            <a asp-page="OrderList" asp-route-status="cancelled" style="text-decoration:none; color:black"> <label class="btn   @cancelled" for="cancelled">Canceled</label></a>
+          
+            <a asp-page="OrderList" asp-route-status="completed" style="text-decoration:none; color:black"><label class="btn  @completed" for="completed">Completed</label></a>
+         
+            <a asp-page="OrderList" asp-route-status="inprocess" style="text-decoration:none; color:black"> <label class="btn  @inprocess" for="inprocess"> In Process</label></a>
+        </div>
+    </div>
+    <br /><br />
+    <table id="myTable" class="table hover row-border table-responsive table-bordered table-striped text-black-50" style="width:100%">
+        <thead class="bg-primary text-white">
+            <tr>
+                <th>Order ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Order Total</th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@section Scripts{
+    <script src="~/js/OrderListJavaScript.js"></script>
+}

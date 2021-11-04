@@ -1,0 +1,163 @@
+﻿@page
+@using Microsoft.Extensions.Options
+@model eCommerce.Pages.Customer.ShoppingCart.SummaryModel
+@inject IOptions<eCommerce.Utility.StripeSettings> Stripe
+@{
+}
+
+<form method="post">
+    <br />
+    @if (Model.OrderDetailsCartVM.listCart.Count > 0)
+    {
+        <input asp-for="@Model.OrderDetailsCartVM.listCart[0].ApplicationUserID" type="hidden" />
+    <div >
+        <div class="container">
+            <div class="card mb-3" >
+                <div class="card-header bg-info text-light ml- row container">
+                    <div class="col-6 text-black-50">
+                        <i class="fa fa-shopping-cart"></i> &nbsp;
+                        Order Summary
+                    </div>
+                    <div class="col-6 text-end">
+                        <a class="btn btn-outline-dark btn-sm" asp-page="Index">Back to Cart</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="container rounded p-2">
+                        <div class="row">
+                            <div class="col-12 col-lg-6 pb-4">
+                                <div class="row">
+                                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="text-info">Delivery Details:</span>
+                                    </h4>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">
+                                        <label>Name</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <input id="txtName" asp-for="@Model.OrderDetailsCartVM.OrderHeader.DeliveryName" type="text" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">
+                                        <label>Phone Number</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <input id="txtPhone" asp-for="@Model.OrderDetailsCartVM.OrderHeader.PhoneNumber" type="text" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">
+                                        <label>Delivery date</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <input id="datepicker" value="" asp-for="@Model.OrderDetailsCartVM.OrderHeader.DeliveryDate" type="text" class="form-control" />
+                                    </div>
+                                </div>
+                                
+                                <div class="row my-1">
+                                    <div class="col-3">
+                                        <label>Delivery Time</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <input id="timepicker" value="" asp-for="@Model.OrderDetailsCartVM.OrderHeader.DeliveryTime" type="text" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">
+                                        <label>Additional Information</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <textarea asp-for="@Model.OrderDetailsCartVM.OrderHeader.Comments" type="text" style="height:100px" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-lg-5 offset-lg-1">
+                                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                    <span class="text-info">Order Summary:</span>
+                                </h4>
+                                <ul class="list-group mb-3">
+                                    @{ var total=0.0;}
+                                    @foreach (var item in Model.OrderDetailsCartVM.listCart)
+                                    {
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <div>
+                                            <h6 class="my-0">@item.Product.Name</h6>
+                                            <small class="text-muted">Quantity: @item.Count</small>
+                                        </div>
+                                        <span class="text-muted">$@((item.Product.Cost * item.Count).ToString("0.00"))</span>
+                                        @{ total += (item.Product.Cost * item.Count); }
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between bg-light">
+                                        <small class="text-info">Total (USD)</small>
+                                        <strong class="text-info">$@total.ToString("0.00")</strong>
+                                    </li>
+                                            }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-12 col-md-4 offset-md-8">
+                            @{ 
+                                var stripeOrderTotal = Model.OrderDetailsCartVM.OrderHeader.OrderTotal * 100;
+                            }
+                            <script src="https://checkout.stripe.com/checkout.js" class="stripe-button" 
+                                    data-key="@Stripe.Value.PublishableKey"
+                                    data-amount="@stripeOrderTotal"
+                                    data-name="eCommerce"
+                                    data-label="Place Order"
+                                    data-description="Online Market"
+                                    data-locale="auto"
+                                    data-allow-remember-me="false"
+                                    data-image="https://stripe.com/img/documentation/checkout/marketplace.png">
+
+                            </script>
+                            <script>document.getElementsByClassName("stripe-button-el")[0].style.display = 'none';</script>
+                            <button type="submit" id="placeOrder" onclick="return validateInput()" value="Place Order" class="btn btn-info form-control">Place Order</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+</form>
+
+@section Scripts{ 
+<script>
+    $(function () {
+        $("#datepicker").datepicker({ minDate: 1, maxDate: "+1W" });
+        $("#timepicker").timepicker({ 'minTime': '07:00 AM', 'maxTime': '10:00 PM',step:'30'});
+    });
+
+    function validateInput() {
+        var name = document.getElementById('txtName').value;
+        var phoneNum = document.getElementById('txtPhone').value;
+        var date = document.getElementById('datepicker').value;
+        var time = document.getElementById('timepicker').value;
+
+        if (name.toString() == '') {
+            swal("Error", "Insert Your Name", "error");
+            return false;
+        }
+        if (phoneNum.toString() == '') {
+            swal("Error", "Insert Your Phone Number", "error");
+            return false;
+        }
+        if (date.toString() == '') {
+            swal("Error", "Select delivery date", "error");
+            return false;
+        }
+        if (time.toString() == '') {
+            swal("Error", "Select delivery time", "error");
+            return false;
+        }
+    }
+</script>
+
+} 

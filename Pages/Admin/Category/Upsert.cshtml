@@ -1,0 +1,48 @@
+﻿@page
+@model eCommerce.Pages.Admin.Category.UpsertModel
+@{
+}
+<br /><br />
+<form method="post" asp-action="Upsert">
+    <div class="container row p-2 m-2 backgroundWhite border">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @if (Model.Category.CategoryID != 0) { 
+            <input  type="hidden" asp-for="Category.CategoryID" />
+        }
+        <div class="col-12 px-3" style="border-bottom:2px solid #325d88">
+            <h2 class="text-primary">@(Model.Category.CategoryID == 0? "Create ": "Edit") Category</h2>
+        </div>
+
+        <div class="col-5 pt-3">
+            <div class="form-group row p-3">
+
+                <label asp-for="Category.Name" class="form-label"></label>
+
+                <input type="text" class="form-control " asp-for="Category.Name" placeholder="@(Model.Category.CategoryID==0? "Name" : Model.Category.Name)">
+                <span class="text-danger" asp-validation-for="Category.Name"></span>
+
+            </div>
+
+            <div class="form-group row p-3">
+
+                <label asp-for="Category.DisplayOrder" class="form-label"></label>
+
+                <input type="text" class="form-control " asp-for="Category.DisplayOrder" placeholder="@(Model.Category.CategoryID==0? "Order" : Model.Category.DisplayOrder)">
+                <span class="text-danger" asp-validation-for="Category.DisplayOrder"></span>
+
+            </div>
+            <div class="form-group row p-3">
+                <div class="col-6">
+                
+                    
+                    <button type="submit" class="btn btn-primary form-control">@(Model.Category.CategoryID == 0? "Create ": "Update")</button>
+                  
+                </div>
+                <div class="col-6">
+                    <a asp-page="./Index" class="btn btn-danger form-control">Back To List</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>

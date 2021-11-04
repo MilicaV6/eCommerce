@@ -1,0 +1,68 @@
+﻿@page
+@model eCommerce.Pages.Customer.Home.IndexModel
+@{
+
+    var categoryValue = true;
+    var seller = false;
+
+
+}
+
+<div class="container d-md-inline-block">
+
+@*</div><div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+    <input type="radio" class="btn-check" name="btnradio" id="btnCategory" autocomplete="off" checked="@categoryValue">
+    <label class="btn btn-outline-secondary" for="btnCategory">Category</label>
+    <input type="radio" class="btn-check" name="btnradio" id="btnSeller" autocomplete="off" checked="@seller">
+    <label class="btn btn-outline-secondary" for="btnSeller">Seller</label>
+</div>*@
+<br />
+<br />
+@if (categoryValue) { 
+@foreach (var category in Model.CategoryList)
+{
+
+
+    if (Model.ProductList.Where(c => c.CategoryID == category.CategoryID).Count() > 0)
+    {
+        <div class="row container pb-3 backgroundWhite">
+            <div class="col-12">
+                <div class="row bg-white border-success">
+                    <h2 class="text-primary pl-1"><b>@category.Name</b></h2>
+                    <div class="col-12">
+                        <div class="row my-3">
+                            @foreach (var product in Model.ProductList.Where(c => c.CategoryID == category.CategoryID))
+                            {
+                                <div class="col-lg-3 col-xl-3 col-md-6 pb-4">
+                                    <div class="card border-primary border-5 mb-3" style="max-width: 20rem;">
+                                        <div class="pl-3 pt-1 text-center">
+                                            <h4 class="card-title"><b>@product.Name</b></h4>
+                                        </div>
+                                        <div class="d-flex justify-content-between form-control border-0">
+                                            <div class="col-6 badge bg-secondary text-center" style="font-size:14px"><b>@product.ProductType.Name</b> </div>
+                                            <div class="col-6 text-end h4" style="color:maroon;"><b>@product.Cost &#36;</b></div>
+                                        </div>
+                                        <img src="@product.Image" class="card-img-top p-2 rounded" height="200px" />
+                                        <a asp-page="Details" class="btn btn-primary" style="border-radius:2px" asp-route-id="@product.ProductID">Details</a>
+                                    </div>
+
+                                </div>
+
+
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    }
+}
+}
+@section Scripts{
+<script>
+   
+</script>
+ }
